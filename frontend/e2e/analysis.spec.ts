@@ -123,8 +123,14 @@ test.describe("Analysis", () => {
 
     // Score gauge and categories should be visible
     await expect(page.getByText("75")).toBeVisible();
-    await expect(page.getByText("Skills")).toBeVisible();
-    await expect(page.getByText("Experience")).toBeVisible();
+    await expect(
+      page.locator('[data-slot="card-title"]').filter({ hasText: "Skills" }),
+    ).toBeVisible();
+    await expect(
+      page
+        .locator('[data-slot="card-title"]')
+        .filter({ hasText: "Experience" }),
+    ).toBeVisible();
   });
 
   test("analysis result page shows score, categories, and tips", async ({
@@ -148,10 +154,20 @@ test.describe("Analysis", () => {
     await expect(page.getByText("Match Score")).toBeVisible();
 
     // Category cards
-    await expect(page.getByText("Skills")).toBeVisible();
-    await expect(page.getByText("Experience")).toBeVisible();
-    await expect(page.getByText("Education")).toBeVisible();
-    await expect(page.getByText("Keywords")).toBeVisible();
+    await expect(
+      page.locator('[data-slot="card-title"]').filter({ hasText: "Skills" }),
+    ).toBeVisible();
+    await expect(
+      page
+        .locator('[data-slot="card-title"]')
+        .filter({ hasText: "Experience" }),
+    ).toBeVisible();
+    await expect(
+      page.locator('[data-slot="card-title"]').filter({ hasText: "Education" }),
+    ).toBeVisible();
+    await expect(
+      page.locator('[data-slot="card-title"]').filter({ hasText: "Keywords" }),
+    ).toBeVisible();
 
     // Tips
     await expect(page.getByText("Add Kubernetes experience")).toBeVisible();

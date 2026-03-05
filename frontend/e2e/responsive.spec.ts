@@ -23,10 +23,11 @@ test.describe("Responsive & Theme", () => {
 
     // Click hamburger → sidebar opens
     await hamburger.click();
-    await expect(page.getByText("Documents").first()).toBeVisible();
+    const navLink = page.getByRole("link", { name: "Documents" }).first();
+    await expect(navLink).toBeVisible({ timeout: 5000 });
 
     // Click a nav link → sidebar closes and navigates
-    await page.getByText("Documents").first().click();
+    await navLink.click();
     await expect(page).toHaveURL(/\/documents/);
   });
 

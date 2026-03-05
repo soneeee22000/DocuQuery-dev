@@ -28,7 +28,7 @@ test.describe("Documents", () => {
     });
 
     // File should appear in the list
-    await expect(page.getByText("sample.txt")).toBeVisible();
+    await expect(page.getByText("sample.txt", { exact: true })).toBeVisible();
   });
 
   test("delete a document removes it from the list", async ({ page }) => {
@@ -56,6 +56,8 @@ test.describe("Documents", () => {
     }
 
     // File should be removed
-    await expect(page.getByText("sample.txt")).toBeHidden({ timeout: 5000 });
+    await expect(page.getByText("sample.txt", { exact: true })).toBeHidden({
+      timeout: 5000,
+    });
   });
 });
