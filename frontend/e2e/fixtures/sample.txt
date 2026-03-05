@@ -1,0 +1,25 @@
+John Doe
+Software Engineer
+
+Summary:
+Experienced software engineer with 5 years of Python, JavaScript, and React development.
+Strong background in building RESTful APIs, microservices, and cloud-native applications.
+
+Skills:
+- Python, FastAPI, Django
+- JavaScript, TypeScript, React, Next.js
+- PostgreSQL, MongoDB, Redis
+- Docker, AWS, CI/CD
+- Git, Agile, TDD
+
+Experience:
+Senior Software Engineer at TechCorp (2021-2024)
+- Built microservices handling 10K+ requests per second
+- Led team of 4 engineers on customer-facing dashboard
+
+Software Engineer at StartupXYZ (2019-2021)
+- Developed REST APIs using FastAPI and PostgreSQL
+- Implemented CI/CD pipelines with GitHub Actions
+
+Education:
+B.S. Computer Science, State University (2019)

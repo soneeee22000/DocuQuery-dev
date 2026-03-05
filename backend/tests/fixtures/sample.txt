@@ -1,0 +1,13 @@
+John Doe
+Software Engineer
+
+Experience:
+- 5 years Python development
+- FastAPI, Django, Flask
+- PostgreSQL, Redis
+
+Education:
+- BS Computer Science, MIT 2018
+
+Skills:
+Python, JavaScript, TypeScript, SQL, Docker, AWS
