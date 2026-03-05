@@ -14,27 +14,43 @@ DocuQuery is a **resume-job match analysis platform** built as a decoupled fulls
 
 ## Architecture Diagram
 
-> **[View interactive System Architecture on Excalidraw](https://excalidraw.com/#json=BSZhDGDr5Qm3eDInxF8E8,EFSiUD4_xVdstYVDt2oipA)** | **[View Match Analysis Flow](https://excalidraw.com/#json=Nuok9iHjYoT326RfiCf-B,9D9-jQvlv29quAIuccmsOw)**
+> Interactive versions: [System Architecture on Excalidraw](https://excalidraw.com/#json=BSZhDGDr5Qm3eDInxF8E8,EFSiUD4_xVdstYVDt2oipA) | [Match Analysis Flow](https://excalidraw.com/#json=Nuok9iHjYoT326RfiCf-B,9D9-jQvlv29quAIuccmsOw)
 
-```
-                    ┌─────────────────────────────────────────────┐
-                    │              Frontend (Vercel)              │
-                    │  Next.js 16 · TypeScript · Tailwind · shadcn│
-                    └──────────────────┬──────────────────────────┘
-                                       │ REST API
-                    ┌──────────────────▼──────────────────────────┐
-                    │              Backend (Railway)              │
-                    │  FastAPI · Python 3.12 · SQLAlchemy · JWT   │
-                    │                                             │
-                    │  ┌──────────┐ ┌────────────┐ ┌───────────┐ │
-                    │  │Doc Parser│ │Match Analyz.│ │Tips Engine│ │
-                    │  └──────────┘ └──────┬─────┘ └───────────┘ │
-                    └──────────┬───────────┼──────────────────────┘
-                               │           │
-                    ┌──────────▼──┐  ┌─────▼──────────┐
-                    │ PostgreSQL  │  │ OpenAI         │
-                    │ (Supabase)  │  │ GPT-4o-mini    │
-                    └─────────────┘  └────────────────┘
+```mermaid
+graph TB
+    subgraph Frontend["Frontend — Vercel"]
+        direction TB
+        NJ["Next.js 16 + TypeScript"]
+        AR["App Router"] --- SC["shadcn/ui"]
+        HK["Custom Hooks"] --- TW["Tailwind CSS"]
+        DM["Dark Mode"]
+    end
+
+    subgraph Backend["Backend — Railway"]
+        direction TB
+        FA["FastAPI + Python 3.12"]
+        AUTH["Auth · JWT"] --- DOCS["Documents API"]
+        PARSE["Doc Parser<br/>PDF / DOCX / TXT"] --- ANALYZE["Match Analyzer<br/>LLM + JSON mode"]
+        TIPS["Tips Engine"] --- STORE["File Storage"]
+        ALB["Alembic Migrations"]
+    end
+
+    subgraph Data["Data & External"]
+        direction TB
+        PG[("PostgreSQL 16<br/>Supabase")]
+        OAI["OpenAI GPT-4o-mini<br/>JSON mode · temp=0.2"]
+        FS[("File Storage")]
+    end
+
+    Frontend -->|"REST API"| Backend
+    Frontend -.->|"Auth"| PG
+    Backend -->|"SQLAlchemy async"| PG
+    Backend -->|"Structured prompts"| OAI
+    Backend --> FS
+
+    style Frontend fill:#dbe4ff,stroke:#4a9eed,color:#1e1e1e
+    style Backend fill:#e5dbff,stroke:#8b5cf6,color:#1e1e1e
+    style Data fill:#d3f9d8,stroke:#22c55e,color:#1e1e1e
 ```
 
 ## Data Model
