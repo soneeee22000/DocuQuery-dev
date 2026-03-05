@@ -14,19 +14,27 @@ DocuQuery is a **resume-job match analysis platform** built as a decoupled fulls
 
 ## Architecture Diagram
 
-```mermaid
-graph TD
-    A[Next.js Frontend] -->|REST API| B[FastAPI Backend]
-    B --> C[PostgreSQL / Supabase]
-    B --> D[Supabase Storage]
-    B --> E[OpenAI / Claude API]
-    A -->|Auth| F[Supabase Auth]
+> **[View interactive System Architecture on Excalidraw](https://excalidraw.com/#json=BSZhDGDr5Qm3eDInxF8E8,EFSiUD4_xVdstYVDt2oipA)** | **[View Match Analysis Flow](https://excalidraw.com/#json=Nuok9iHjYoT326RfiCf-B,9D9-jQvlv29quAIuccmsOw)**
 
-    subgraph Backend Services
-        B --> G[Document Parser]
-        B --> H[Match Analyzer]
-        B --> I[Tips Generator]
-    end
+```
+                    ┌─────────────────────────────────────────────┐
+                    │              Frontend (Vercel)              │
+                    │  Next.js 16 · TypeScript · Tailwind · shadcn│
+                    └──────────────────┬──────────────────────────┘
+                                       │ REST API
+                    ┌──────────────────▼──────────────────────────┐
+                    │              Backend (Railway)              │
+                    │  FastAPI · Python 3.12 · SQLAlchemy · JWT   │
+                    │                                             │
+                    │  ┌──────────┐ ┌────────────┐ ┌───────────┐ │
+                    │  │Doc Parser│ │Match Analyz.│ │Tips Engine│ │
+                    │  └──────────┘ └──────┬─────┘ └───────────┘ │
+                    └──────────┬───────────┼──────────────────────┘
+                               │           │
+                    ┌──────────▼──┐  ┌─────▼──────────┐
+                    │ PostgreSQL  │  │ OpenAI         │
+                    │ (Supabase)  │  │ GPT-4o-mini    │
+                    └─────────────┘  └────────────────┘
 ```
 
 ## Data Model
