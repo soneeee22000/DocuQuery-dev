@@ -4,14 +4,16 @@ import json
 import logging
 from typing import Any
 
-from openai import AsyncOpenAI, APITimeoutError, RateLimitError
+from openai import APITimeoutError, AsyncOpenAI, RateLimitError
 
 from app.core.config import settings
 from app.schemas.analysis import AnalysisResults, AnalysisTip
 
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = """You are a resume-job match analyst. Analyze how well the resume matches the job description.
+SYSTEM_PROMPT = """\
+You are a resume-job match analyst. \
+Analyze how well the resume matches the job description.
 
 Return a JSON object with this exact structure:
 {
@@ -83,10 +85,7 @@ async def run_analysis(
     truncated_resume = resume_text[:MAX_RESUME_CHARS]
     truncated_jd = jd_text[:MAX_JD_CHARS]
 
-    user_prompt = (
-        f"## Resume\n{truncated_resume}\n\n"
-        f"## Job Description\n{truncated_jd}"
-    )
+    user_prompt = f"## Resume\n{truncated_resume}\n\n## Job Description\n{truncated_jd}"
 
     client = AsyncOpenAI(
         api_key=settings.OPENAI_API_KEY,
@@ -111,22 +110,26 @@ async def run_analysis(
             content = response.choices[0].message.content or "{}"
             raw = json.loads(content)
             break
-        except APITimeoutError:
+        except APITimeoutError as exc:
             if retries < max_retries:
                 retries += 1
-                logger.warning("OpenAI timeout, retrying (%d/%d)", retries, max_retries)
+                logger.warning(
+                    "OpenAI timeout, retrying (%d/%d)",
+                    retries,
+                    max_retries,
+                )
                 continue
             raise AppError(
                 code="LLM_TIMEOUT",
                 message="Analysis timed out. Please try again.",
                 status_code=504,
-            )
-        except RateLimitError:
+            ) from exc
+        except RateLimitError as exc:
             raise AppError(
                 code="RATE_LIMIT",
                 message="Rate limit exceeded. Please wait and try again.",
                 status_code=429,
-            )
+            ) from exc
 
     try:
         results = AnalysisResults(
@@ -140,7 +143,7 @@ async def run_analysis(
             code="LLM_PARSE_ERROR",
             message="Failed to parse analysis results. Please try again.",
             status_code=502,
-        )
+        ) from exc
 
     raw_tips = raw.get("tips", [])
     try:

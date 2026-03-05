@@ -114,8 +114,12 @@ async def test_trigger_wrong_doc_type(
     tokens = await register_and_get_token(client)
     token = tokens["access_token"]
 
-    jd1 = await _upload_txt(client, token, doc_type="job_description", filename="jd1.txt")
-    jd2 = await _upload_txt(client, token, doc_type="job_description", filename="jd2.txt")
+    jd1 = await _upload_txt(
+        client, token, doc_type="job_description", filename="jd1.txt"
+    )
+    jd2 = await _upload_txt(
+        client, token, doc_type="job_description", filename="jd2.txt"
+    )
 
     response = await client.post(
         "/api/v1/analysis/match",
@@ -168,7 +172,9 @@ async def test_trigger_wrong_owner(
         json={"email": "other@example.com", "password": "otherpassword1"},
     )
     token2 = resp2.json()["data"]["access_token"]
-    jd = await _upload_txt(client, token2, doc_type="job_description", filename="jd.txt")
+    jd = await _upload_txt(
+        client, token2, doc_type="job_description", filename="jd.txt"
+    )
 
     response = await client.post(
         "/api/v1/analysis/match",

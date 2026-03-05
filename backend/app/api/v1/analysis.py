@@ -90,12 +90,8 @@ async def trigger_analysis(
     current_user: User = Depends(get_current_user),
 ) -> ApiResponse[AnalysisResponse]:
     """Trigger a new match analysis between a resume and job description."""
-    resume = await _get_owned_document(
-        db, body.resume_id, current_user.id, "resume"
-    )
-    jd = await _get_owned_document(
-        db, body.jd_id, current_user.id, "job_description"
-    )
+    resume = await _get_owned_document(db, body.resume_id, current_user.id, "resume")
+    jd = await _get_owned_document(db, body.jd_id, current_user.id, "job_description")
 
     assert resume.extracted_text is not None
     assert jd.extracted_text is not None

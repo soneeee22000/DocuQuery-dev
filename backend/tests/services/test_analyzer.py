@@ -171,7 +171,7 @@ async def test_run_analysis_malformed_json(mock_openai_cls: MagicMock) -> None:
     response.choices = [choice]
     mock_client.chat.completions.create.return_value = response
 
-    with pytest.raises(Exception):
+    with pytest.raises(json.JSONDecodeError):
         await run_analysis("Resume", "JD")
 
 
