@@ -18,34 +18,31 @@ DocuQuery is a **resume-job match analysis platform** built as a decoupled fulls
 
 ```mermaid
 graph TB
-    subgraph Frontend["Frontend — Vercel"]
-        direction TB
-        NJ["Next.js 16 + TypeScript"]
-        AR["App Router"] --- SC["shadcn/ui"]
-        HK["Custom Hooks"] --- TW["Tailwind CSS"]
-        DM["Dark Mode"]
+    subgraph Frontend
+        NJ[Next.js 16 + TypeScript]
+        AR[App Router] --- SC[shadcn/ui]
+        HK[Custom Hooks] --- TW[Tailwind CSS]
+        DM[Dark Mode]
     end
 
-    subgraph Backend["Backend — Railway"]
-        direction TB
-        FA["FastAPI + Python 3.12"]
-        AUTH["Auth · JWT"] --- DOCS["Documents API"]
-        PARSE["Doc Parser<br/>PDF / DOCX / TXT"] --- ANALYZE["Match Analyzer<br/>LLM + JSON mode"]
-        TIPS["Tips Engine"] --- STORE["File Storage"]
-        ALB["Alembic Migrations"]
+    subgraph Backend
+        FA[FastAPI + Python 3.12]
+        AUTH[Auth - JWT] --- DOCS[Documents API]
+        PARSE[Doc Parser] --- ANALYZE[Match Analyzer]
+        TIPS[Tips Engine] --- STORE[File Storage]
+        ALB[Alembic Migrations]
     end
 
-    subgraph Data["Data & External"]
-        direction TB
-        PG[("PostgreSQL 16<br/>Supabase")]
-        OAI["OpenAI GPT-4o-mini<br/>JSON mode · temp=0.2"]
-        FS[("File Storage")]
+    subgraph Data
+        PG[(PostgreSQL 16)]
+        OAI[OpenAI GPT-4o-mini]
+        FS[(File Storage)]
     end
 
-    Frontend -->|"REST API"| Backend
-    Frontend -.->|"Auth"| PG
-    Backend -->|"SQLAlchemy async"| PG
-    Backend -->|"Structured prompts"| OAI
+    Frontend -->|REST API| Backend
+    Frontend -.->|Auth| PG
+    Backend -->|SQLAlchemy async| PG
+    Backend -->|Structured prompts| OAI
     Backend --> FS
 
     style Frontend fill:#dbe4ff,stroke:#4a9eed,color:#1e1e1e

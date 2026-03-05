@@ -35,70 +35,66 @@ DocuQuery gives you a **structured, AI-powered match analysis in under 30 second
 
 ```mermaid
 graph TB
-    subgraph Frontend["Frontend — Vercel"]
-        direction TB
-        NJ["Next.js 16 + TypeScript"]
-        AR["App Router"] --- SC["shadcn/ui"]
-        HK["Custom Hooks"] --- TW["Tailwind CSS"]
-        DM["Dark Mode"]
+    subgraph Frontend
+        NJ[Next.js 16 + TypeScript]
+        AR[App Router] --- SC[shadcn/ui]
+        HK[Custom Hooks] --- TW[Tailwind CSS]
+        DM[Dark Mode]
     end
 
-    subgraph Backend["Backend — Railway"]
-        direction TB
-        FA["FastAPI + Python 3.12"]
-        AUTH["Auth · JWT"] --- DOCS["Documents API"]
-        PARSE["Doc Parser<br/>PDF / DOCX / TXT"] --- ANALYZE["Match Analyzer<br/>LLM + JSON mode"]
-        TIPS["Tips Engine"] --- STORE["File Storage"]
-        ALB["Alembic Migrations"]
+    subgraph Backend
+        FA[FastAPI + Python 3.12]
+        AUTH[Auth - JWT] --- DOCS[Documents API]
+        PARSE[Doc Parser] --- ANALYZE[Match Analyzer]
+        TIPS[Tips Engine] --- STORE[File Storage]
+        ALB[Alembic Migrations]
     end
 
-    subgraph Data["Data & External"]
-        direction TB
-        PG[("PostgreSQL 16<br/>Supabase")]
-        OAI["OpenAI GPT-4o-mini<br/>JSON mode · temp=0.2"]
-        FS[("File Storage")]
+    subgraph Data
+        PG[(PostgreSQL 16)]
+        OAI[OpenAI GPT-4o-mini]
+        FS[(File Storage)]
     end
 
-    subgraph Infra["Infrastructure"]
-        direction LR
-        VCL["Vercel"] --- RWY["Railway"]
-        DCK["Docker Compose"] --- GHA["GitHub Actions CI"]
-        PT["59 Tests"] --- E2E["10 E2E Tests"]
+    subgraph Infrastructure
+        VCL[Vercel] --- RWY[Railway]
+        DCK[Docker Compose] --- GHA[GitHub Actions CI]
+        PT[59 Tests] --- E2E[10 E2E Tests]
     end
 
-    Frontend -->|"REST API"| Backend
-    Frontend -.->|"Auth"| PG
-    Backend -->|"SQLAlchemy async"| PG
-    Backend -->|"Structured prompts"| OAI
+    Frontend -->|REST API| Backend
+    Frontend -.->|Auth| PG
+    Backend -->|SQLAlchemy async| PG
+    Backend -->|Structured prompts| OAI
     Backend --> FS
 
     style Frontend fill:#dbe4ff,stroke:#4a9eed,color:#1e1e1e
     style Backend fill:#e5dbff,stroke:#8b5cf6,color:#1e1e1e
     style Data fill:#d3f9d8,stroke:#22c55e,color:#1e1e1e
-    style Infra fill:#f3e8ff,stroke:#8b5cf6,color:#1e1e1e
+    style Infrastructure fill:#f3e8ff,stroke:#8b5cf6,color:#1e1e1e
 ```
 
 ### Match Analysis Flow
 
 ```mermaid
 graph LR
-    A["Upload Resume<br/>+ Job Description<br/><i>PDF / DOCX / TXT</i>"] -->|1| B["Extract Text<br/><i>PyMuPDF · python-docx</i>"]
-    B -->|2| C["Validate & Store<br/><i>Magic bytes + DB</i>"]
-    C -->|3| D["Select Resume + JD<br/>for Analysis"]
-    D -->|4| E["Build LLM Prompt<br/><i>8K resume / 4K JD</i>"]
-    E -->|5| F["Call GPT-4o-mini<br/><i>JSON mode · temp=0.2</i><br/><i>1 retry on timeout</i>"]
-    F -->|6| G["Parse + Validate<br/><i>Pydantic schemas</i>"]
-    G -->|7| H["Store Analysis<br/>+ Return Response"]
+    A[Upload Resume + JD] -->|1| B[Extract Text]
+    B -->|2| C[Validate and Store]
+    C -->|3| D[Select Resume + JD]
+    D -->|4| E[Build LLM Prompt]
+    E -->|5| F[Call GPT-4o-mini]
+    F -->|6| G[Parse and Validate]
+    G -->|7| H[Store Analysis]
 
-    H -->|8| I["Score Gauge<br/><b>78 / 100</b>"]
-    H --> J["Category Breakdown"]
-    H --> K["Keyword Gaps"]
-    H --> L["Actionable Tips"]
+    H -->|8| I[Score: 78/100]
+    H --> J[Category Breakdown]
+    H --> K[Keyword Gaps]
+    H --> L[Actionable Tips]
 
-    J --> J1["Skills 85%"]
-    J --> J2["Experience 70%"]
-    J --> J3["Education 90%"]
-    J --> J4["Keywords 65%"]
+    J --> J1[Skills 85%]
+    J --> J2[Experience 70%]
+    J --> J3[Education 90%]
+    J --> J4[Keywords 65%]
 
     style A fill:#a5d8ff,stroke:#4a9eed,color:#1e1e1e
     style B fill:#ffd8a8,stroke:#f59e0b,color:#1e1e1e
